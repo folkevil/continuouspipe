@@ -41,4 +41,4 @@ script:
     - popd
 
     # Shell script tests
-    - for file in $(find . -type f -perm +111 ! -path "*/vendor/*" ! -path "*/.git/*" ! -path "*/api/bin/console" ! -path "*/api/bin/symfony_requirements" | sed 's#^\.#/app#'); do docker run -v "$(pwd):/app" koalaman/shellcheck:v0.4.7 --exclude SC1091 "$file"; done
+    - for file in $(find . -type f \( -perm +111 -or -name "*.sh" \) ! -path "*/vendor/*" ! -path "*/.git/*" ! -path "*/api/bin/console" ! -path "*/api/bin/symfony_requirements" | sed 's#^\.#/app#'); do docker run -v "$(pwd):/app" koalaman/shellcheck:v0.4.7 --exclude SC1091 "$file"; done
