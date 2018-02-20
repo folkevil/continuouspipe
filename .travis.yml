@@ -15,6 +15,7 @@ env:
         - REDIS_HOST=127.0.0.1
 
 services:
+    - docker
     - mysql
     - redis-server
 
@@ -38,3 +39,6 @@ script:
     - bin/console doctrine:migrations:migrate --no-interaction
     - vendor/bin/behat --profile=smoke -fprogress
     - popd
+
+    # Shell script tests
+    - for file in $(find . -type f -perm +111 ! -path "*/vendor/*" ! -path "*/.git/*" ! -path "*/api/bin/console" ! -path "*/api/bin/symfony_requirements" | sed 's#^\.#/app#'); do docker run -v "$(pwd):/app" koalaman/shellcheck:v0.4.7 --exclude SC1091 "$file"; done
